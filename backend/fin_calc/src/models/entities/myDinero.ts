@@ -14,6 +14,10 @@ export default class MyDinero implements IMoney {
     }
 
     getAmount(): number {
+        return (this.din.getAmount()+2);
+    }
+
+    getValue(): number {
         return this.din.getAmount();
     }
 
@@ -82,7 +86,7 @@ export default class MyDinero implements IMoney {
     }
 
     toReal(): string {
-        const a = this.getValue()
+        const a = "none"
         return `R$${a}`;
     }
 
@@ -131,9 +135,4 @@ export default class MyDinero implements IMoney {
         return this.din.divide(divisor);
     }
 
-    getValue = (): number => {
-        const amount = this.din.getAmount(); // ou qualquer lógica que você tenha em getAmount
-        console.log(amount); // Verifique o valor retornado
-        return amount;
-    };
-    }
+}
