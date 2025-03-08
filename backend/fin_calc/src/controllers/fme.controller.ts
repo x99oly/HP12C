@@ -1,15 +1,13 @@
-import { RouterContext } from "https://deno.land/x/oak/mod.ts";
+import { RouterContext } from "../dependencies/requisition.deps.ts";
+import Money from "../models/entities/myDinero.ts";
+import Fme from "../models/operations/fme.ts";
 
 export default class FmeController {
-    public GetSum(ctx: RouterContext<string, { value1: string, value2: string }, Record<string, any>>) {
-        const value1 = ctx.params.value1;
-        const value2 = ctx.params.value2;
-
-        const num1 = parseFloat(value1);
-        const num2 = parseFloat(value2);
-
-        const sum = num1 + num2;
-
-        ctx.response.body = { sum };
+    fme = new Fme()
+    public GetSum(ctx: RouterContext<string, { value1: string, value2: string }, Record<string, object>>) {
+        const main = new Money(parseFloat(ctx.params.value1));
+        const other = new Money(parseFloat(ctx.params.value2));
+        
+        ctx.response.body = this.fme.sum(main,other).getAmount()
     }
 }

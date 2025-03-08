@@ -105,6 +105,10 @@
     "https://deno.land/x/oak/mod.ts": "https://deno.land/x/oak@v17.1.4/mod.ts"
   },
   "remote": {
+    "https://cdn.skypack.dev/-/decimal.js@v10.5.0-nP8riJCc4zLWzEdxQc6j/dist=es2019,mode=imports/optimized/decimaljs.js": "abe7396037b34e280ef7273f464474973c80977f670996c23eb5e72069ac98b4",
+    "https://cdn.skypack.dev/-/dinero.js@v1.9.1-cOF4QnfwVEqXTHBzepvA/dist=es2019,mode=imports/optimized/dinerojs.js": "28047b329cf87dc27e8ceb7d0b362a9e319386b5752f229421871862677d91af",
+    "https://cdn.skypack.dev/decimal.js": "fa94f804cd691ad9bbf74f06119830f6b3bfe3bf8c064604f0e65bdd6b6d1aa7",
+    "https://cdn.skypack.dev/dinero.js": "00106c51a22b91ee10a88391021db0bb26f81bdd27d3b568ca9067486c33a8cd",
     "https://deno.land/x/oak@v17.1.4/application.ts": "69fb6462eed013562ee61239e60ea77e5df3abb2b0df34568593b9774d72e98f",
     "https://deno.land/x/oak@v17.1.4/body.ts": "f91d8e0298abbabe6acb543d1090e2a41aa665375918a575d72bd6b98b538e40",
     "https://deno.land/x/oak@v17.1.4/context.ts": "e04c3d67d68ee01a279aeded457b0d66255450593dacab22251e7eb0cf6a92e5",

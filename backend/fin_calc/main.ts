@@ -1,4 +1,4 @@
-import { Application, Router } from "./src/dependencies/deps.ts";
+import { Application, Router } from "./src/dependencies/requisition.deps.ts";
 import calcRouter from "./src/routes/calcRouter.ts";
 
 const port = 8000
