@@ -14,12 +14,14 @@ export default class MyDinero implements IMoney {
     }
 
     getAmount(): number {
-        return (this.din.getAmount()+2);
+        return this.din.getAmount();
     }
 
     getValue(): number {
-        return this.din.getAmount();
+        return this.din.getAmount()/(100*100);
     }
+
+    
 
     getCurrency(): string {
         return this.din.getCurrency();
@@ -86,8 +88,7 @@ export default class MyDinero implements IMoney {
     }
 
     toReal(): string {
-        const a = "none"
-        return `R$${a}`;
+        return `R$${this.getValue().toFixed(2)}`;
     }
 
     toUnit(): number {
