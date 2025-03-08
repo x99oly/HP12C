@@ -1,6 +1,8 @@
 import { Application, Router } from "./src/dependencies/deps.ts";
 import calcRouter from "./src/routes/calcRouter.ts";
 
+const port = 8000
+
 const app = new Application();
 
 const router = new Router();
@@ -14,5 +16,5 @@ router.use("/calc", calcRouter.routes())
 app.use(router.routes());
 app.use(router.allowedMethods());
 
-await app.listen({ port: 8000 });
+await app.listen({ port: port });
 console.log("Server running on http://localhost:8000");
