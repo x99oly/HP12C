@@ -1,8 +1,18 @@
-export function add(a: number, b: number): number {
-  return a + b;
-}
+import { Application, Router } from "./src/dependencies/deps.ts";
+import calcRouter from "./src/routes/calcRouter.ts";
 
-// Learn more at https://docs.deno.com/runtime/manual/examples/module_metadata#concepts
-if (import.meta.main) {
-  console.log("Add 2 + 3 =", add(2, 3));
-}
+const app = new Application();
+
+const router = new Router();
+
+router.get("/", (ctx) => {
+    ctx.response.body = "Hello, Deno!";
+});
+
+router.use("/calc", calcRouter.routes())
+
+app.use(router.routes());
+app.use(router.allowedMethods());
+
+await app.listen({ port: 8000 });
+console.log("Server running on http://localhost:8000");
