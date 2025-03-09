@@ -72,7 +72,7 @@ export default class FmeController {
     ): Promise<void> {        
         const moneyArr: IMoney[] = await this.getArrFromBody(ctx);
         const instance: IMoney = this.fme.sumArr(moneyArr)
-        ctx.response.body = { result : instance.toString() };
+        ctx.response.body = { result : instance.toJSON() };
     }
 
     private async subtractArr(
@@ -80,7 +80,7 @@ export default class FmeController {
     ): Promise<void> {        
         const moneyArr: IMoney[] = await this.getArrFromBody(ctx);
         const instance: IMoney = this.fme.subtractArr(moneyArr)
-        ctx.response.body = { result : instance.toString() };
+        ctx.response.body = { result : instance.toJSON() };
     }
 
     private async multiplyArr(
@@ -88,7 +88,7 @@ export default class FmeController {
     ): Promise<void> {        
         const moneyArr: IMoney[] = await this.getArrFromBody(ctx);
         const instance: IMoney = this.fme.multiplyArr(moneyArr)
-        ctx.response.body = { result : instance.toString() };
+        ctx.response.body = { result : instance.toJSON() };
     }
 
     private async divideArr(
@@ -96,7 +96,7 @@ export default class FmeController {
     ): Promise<void> {        
         const moneyArr: IMoney[] = await this.getArrFromBody(ctx);
         const instance: IMoney = this.fme.divideArr(moneyArr)
-        ctx.response.body = { result : instance.toString() };
+        ctx.response.body = { result : instance.toJSON() };
     }
 
     private getArrFromUrl = (

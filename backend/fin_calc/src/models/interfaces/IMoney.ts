@@ -2,7 +2,7 @@ export default interface IMoney {
     getInstance(): object
     setFormat(format:string):void
     getID():string
-    
+
     getAmount(): number; // return the integer or cents one
     getCurrency(): string;
     getLocale(): string;
@@ -12,7 +12,7 @@ export default interface IMoney {
     
     setLocale(locale: string): void;
     convertPrecision(precision: number): number;
-
+    getScalePrecision(): number
     toFormat(): string;
     toUnit(): number;
     
@@ -20,6 +20,7 @@ export default interface IMoney {
     subtract(other: IMoney): IMoney;
     multiply(other: number): IMoney;
     divide(other: number): IMoney;
+    toJSON(): object;
 
     toString(): string
 
@@ -33,7 +34,6 @@ export default interface IMoney {
     // hasSubUnits(): boolean;
     // toRoundedUnit(): number;
     // toObject(): object;
-    // toJSON(): string;
     // normalizePrecision(): IMoney;
     // lessThan(other: IMoney): boolean;
     // hasSameCurrency(other: IMoney): boolean;

@@ -62,6 +62,10 @@ export default class MyDinero implements IMoney {
         return this.din.convertPrecision(precision);
     }
 
+    getScalePrecision(): number {
+      return Math.pow(10, this.getPrecision())
+    }
+
     getInstance(): typeof dinero {
         return this.din;
     }
@@ -81,6 +85,17 @@ export default class MyDinero implements IMoney {
     divide(divisor: number): IMoney {
         if (divisor === 0) throw new DivideByZeroError();
         return new MyDinero(this.din.divide(divisor).getAmount(), true);
+    }
+
+    toJSON(): object {
+      return {
+        "total" : this.toFormat(),
+        "valor" : this.toUnit(),
+        "moeda" : this.getCurrency(),
+        "regionalização" : this.getLocale(),
+        "precisão" : this.getScalePrecision()
+    }
+    
     }
 
     toString(): string {
