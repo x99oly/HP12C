@@ -125,16 +125,16 @@ export default class MyDinero implements IMoney {
     }
 
     subtract(other: IMoney): IMoney {
-        return new MyDinero(this.din.subtract(other.getInstance()), true);
+        return new MyDinero(this.din.subtract(other.getInstance()).getAmount(), true);
     }
 
     multiply(factor: number): IMoney {
-        return new MyDinero(this.din.multiply(factor), true);
+        return new MyDinero(this.din.multiply(factor).getAmount(), true);
     }
 
     divide(divisor: number): IMoney {
         if (divisor === 0) throw new DivideByZeroError();
-        return new MyDinero(this.din.divide(divisor), true);
+        return new MyDinero(this.din.divide(divisor).getAmount(), true);
     }
 
     toString(): string {
