@@ -1,7 +1,7 @@
 export default interface IMoney {
     getInstance(): object
-    
-    getValue(): number // return the float one
+    setFormat(format:string):void
+
     getAmount(): number; // return the integer one
     getCurrency(): string;
     getLocale(): string;
@@ -21,8 +21,7 @@ export default interface IMoney {
     
     setLocale(locale: string): void;
     
-    toFormat(format:string): string;
-    toReal(): string
+    toFormat(): string;
     toUnit(): number;
     toRoundedUnit(): number;
     toObject(): object;
@@ -34,4 +33,6 @@ export default interface IMoney {
     subtract(other: IMoney): IMoney;
     multiply(other: number): IMoney;
     divide(other: number): IMoney;
+
+    toString(): string
 }

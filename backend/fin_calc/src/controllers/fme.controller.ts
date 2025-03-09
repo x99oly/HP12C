@@ -1,9 +1,9 @@
-import { json } from "node:stream/consumers";
 import { RouterContext} from "../dependencies/requisition.deps.ts";
-import { ArgumentMissingError } from "../Exceptions/operations.execption.ts";
 import MyDinero from "../models/entities/myDinero.ts";
 import Fme from "../models/operations/fme.ts";
 import IMoney from "../models/interfaces/IMoney.ts";
+import IMoneyAid from "../models/aid/getImony.ts";
+import { InvalidArgumentError } from "../Exceptions/operations.execption.ts";
 
 export default class FmeController {
     fme = new Fme()
@@ -11,41 +11,33 @@ export default class FmeController {
       public sum(ctx: RouterContext<string, { value1: string, value2: string }, Record<string, object>>) {
         const [main, other] = this.getArrFromUrl(ctx);
       
-        ctx.response.body = this.fme.sum(main, other).toReal();
+        ctx.response.body = this.fme.sum(main, other).toFormat();
       }
 
       public async sumBody(ctx: RouterContext<string, { value1: string, value2: string }, Record<string, object>>) {
         try {
             const moneyArr: IMoney[] = [];
             const data = await ctx.request.body.text();
-    
-            let parsedData: number[] = JSON.parse(data);
-            parsedData.forEach(e => {
-                moneyArr.push(new MyDinero(e));
-            });
+                
+            const parsedData: number[] = JSON.parse(data);
+            parsedData.forEach(e => { moneyArr.push(IMoneyAid.getImoney(e)) });
+            const zero = this.fme.sumArr(moneyArr)
 
-            let zero: IMoney = moneyArr[0]
-            console.log(zero.getAmount())
-            moneyArr.forEach( e => {
-                if (!e.equalsTo(zero)){
-                    console.log("entrou")
-                    zero = this.fme.sum(zero, e)
-                }
-                console.log("zero-amount: "+zero.getAmount()+" zero-value: "+zero.getValue())
-            })
-            
-            ctx.response.status = 200;
-            ctx.response.body = { message: 'Requisição processada com sucesso.', data: zero.toReal() };
+            return ctx.response.body = { result: zero.toString() };
         } catch (error) {
+            if (error instanceof InvalidArgumentError){
+                ctx.response.status = 400;
+                return ctx.response.body = { message: error.message };         
+            }
             ctx.response.status = 500;
-            ctx.response.body = { message: 'Erro interno do servidor.', error: error };
-        }
+            return ctx.response.body = { message: 'Servidor deu pau', error: error };
+        }        
     }
     
     public subtract(ctx: RouterContext<string, { value1: string, value2: string }, Record<string, object>>) {
         const [main, other] = this.getArrFromUrl(ctx);
       
-        ctx.response.body = this.fme.subtract(main,other).toReal()
+        ctx.response.body = this.fme.subtract(main,other).toFormat()
     }
     public multiply(ctx: RouterContext<string, { value1: string, value2: string }, Record<string, object>>) {
         const [main, other] = this.getArrFromUrl(ctx);
@@ -55,7 +47,7 @@ export default class FmeController {
     public divide(ctx: RouterContext<string, { value1: string, value2: string }, Record<string, object>>) {
         const [main, other] = this.getArrFromUrl(ctx);
       
-        ctx.response.body = this.fme.divide(main,(other.getAmount()/100)).toReal() 
+        ctx.response.body = this.fme.divide(main,(other.getAmount()/100)).toFormat()
     }
 
     // FUNÇÕES AUXILIÁRES 

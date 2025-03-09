@@ -1,3 +1,8 @@
+// Para roda deno
+// deno run --allow-all --watch main.ts
+// Para rodar testes
+// deno test --allow-read --allow-net --allow-env --allow-import
+
 import { Application, Router } from "./src/dependencies/requisition.deps.ts";
 import calcRouter from "./src/routes/calcRouter.ts";
 
@@ -18,6 +23,3 @@ app.use(router.allowedMethods());
 
 await app.listen({ port: port });
 console.log("Server running on http://localhost:8000");
-
-// Para rodar testes
-// deno test --allow-read --allow-net --allow-env --allow-import

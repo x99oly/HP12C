@@ -1,17 +1,26 @@
 import IFme from "../interfaces/IFme.ts";
 import IMoney from "../interfaces/IMoney.ts";
-import MyDinero from "../entities/myDinero.ts";
 
-export default class Fme implements IFme {
-    
-    private getInstance = (num: number): IMoney => new MyDinero(num)
+export default class Fme implements IFme {    
 
-    sum = (addend: IMoney, adder: IMoney): IMoney => new MyDinero(addend.sum(adder).getAmount()/100)
+    sum = (addend: IMoney, adder: IMoney): IMoney => addend.sum(adder)
 
-    subtract = (addend: IMoney, adder: IMoney): IMoney => new MyDinero(addend.subtract(adder).getAmount()/100)
+    sumArr = (moneyArr: IMoney[]): IMoney => {
+        let zero: IMoney = moneyArr[0]
+        console.log(zero.getAmount())
+        moneyArr.forEach( e => {
+            if (!e.equalsTo(zero)){
+                console.log("entrou")
+                zero = this.sum(zero, e)
+            }
+        })
+        return zero
+    }
 
-    multiply = (addend: IMoney, count: number): IMoney => new MyDinero(addend.multiply(count).getAmount()/100)
+    subtract = (addend: IMoney, adder: IMoney): IMoney => addend.subtract(adder)
 
-    divide = (addend: IMoney, count: number): IMoney => new MyDinero(addend.divide(count).getAmount()/100)
+    multiply = (addend: IMoney, count: number): IMoney => addend.multiply(count)
+
+    divide = (addend: IMoney, count: number): IMoney => addend.divide(count)
     
 }

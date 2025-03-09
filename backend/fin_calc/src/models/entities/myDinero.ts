@@ -2,35 +2,31 @@ import dinero from "../../dependencies/number.deps.ts";
 import IMoney from "../interfaces/IMoney.ts";
 import {InvalidArgumentError} from "../../Exceptions/operations.execption.ts";
 import DivideByZeroError from "../../Exceptions/math.exceptions.ts"
-import { threadId } from "node:worker_threads";
 
 export default class MyDinero implements IMoney {
     public din: any;
+    private format: string = '$0,0.00'
 
-    constructor(value: number,currency: string = 'BRL', locale: string = 'pt-BR', precision: number = 20) {
+    constructor(value: number, isConverted: boolean = false, currency: string = 'BRL', locale: string = 'pt-BR', precision: number = 2) {
         if (isNaN(value)) throw new InvalidArgumentError("Não é permitido iniciar MyDinero com valores não numéricos.")
-
-        value = value*100;
-        this.din = dinero({ amount: value, currency, locale, precision });
+        
+        if (!isConverted) value = value*100;
+  
+        this.din = dinero({ amount: value, currency, precision });
+        this.din.setLocale(locale)
     }
 
-    
-    setFloat():number{
-        const str = `${this.getAmount()/100}`
-        const pos = str.length - 2;
-        const befere = str.slice(0, pos + 1);
-        const after = str.slice(pos + 1);
-        const newStr = befere + "." + after;
-        return parseFloat(newStr)
+    getIMoney(num: number): IMoney {
+      return new MyDinero(num)
+    }
+
+    setFormat(format:string){
+        this.format = format
     }
 
     getAmount(): number {
         return this.din.getAmount();
-    }
-
-    getValue(): number {
-        return this.setFloat();
-    }    
+    }  
 
     getCurrency(): string {
         return this.din.getCurrency();
@@ -92,13 +88,8 @@ export default class MyDinero implements IMoney {
         this.din.setLocale(locale);
     }
 
-    toFormat(format:string = 'R$ 0,0.00'): string {
-        return this.din.toFormat(format);
-    }
-
-    toReal(): string {
-        const str = this.setFloat()
-        return `R$${str.toFixed(2)}`;
+    toFormat(): string {
+        return this.din.toFormat(this.format);
     }
 
     toUnit(): number {
@@ -130,20 +121,29 @@ export default class MyDinero implements IMoney {
     }
 
     sum(other: IMoney): IMoney {
-        return this.din.add(other.getInstance());
+        return new MyDinero(this.din.add(other.getInstance()).getAmount(), true);
     }
 
     subtract(other: IMoney): IMoney {
-        return this.din.subtract(other.getInstance());
+        return new MyDinero(this.din.subtract(other.getInstance()), true);
     }
 
     multiply(factor: number): IMoney {
-        return this.din.multiply(factor);
+        return new MyDinero(this.din.multiply(factor), true);
     }
 
     divide(divisor: number): IMoney {
         if (divisor === 0) throw new DivideByZeroError();
-        return this.din.divide(divisor);
+        return new MyDinero(this.din.divide(divisor), true);
+    }
+
+    toString(): string {
+      const definition: string[] = []
+      definition.push(`total: ${this.toFormat()}`)
+      definition.push(`valor: ${this.toUnit()}`)
+      definition.push(`moeda: ${this.getCurrency()}`)
+      definition.push(`regionalização: ${this.getLocale()}`)
+      return definition.join(' | ')
     }
 
 }
