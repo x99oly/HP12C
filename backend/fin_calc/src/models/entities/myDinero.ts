@@ -20,7 +20,7 @@ export default class MyDinero implements IMoney {
         const pos = str.length - 3;
         const befere = str.slice(0, pos + 1);
         const after = str.slice(pos + 1);
-        const newStr = befere + "," + after;
+        const newStr = befere + "." + after;
         return parseFloat(newStr)
     }
 
