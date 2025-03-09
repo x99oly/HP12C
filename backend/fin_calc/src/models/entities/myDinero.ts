@@ -132,7 +132,7 @@ export default class MyDinero implements IMoney {
     }
 
     divide(divisor: number): IMoney {
-        if (divisor === 0) throw new DivideByZeroError("Divisão por zero não é permitida.");
+        if (divisor === 0) throw new DivideByZeroError();
         return this.din.divide(divisor);
     }
 
