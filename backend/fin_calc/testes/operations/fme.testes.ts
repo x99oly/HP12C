@@ -11,7 +11,7 @@ Deno.test("1 - Verify the result of the sum of two numbers", () => {
     const result = fme.sum(moneys[0], moneys[1]);
 
     const expected = "R$6.00";
-    const formattedResult = `R$${result.getValue().toFixed(2)}`;
+    const formattedResult = `${result.toReal()}`;
 
     assertEquals(formattedResult, expected);
 });
@@ -21,7 +21,7 @@ Deno.test("2 - Verify the result of the sum with negative numbers", () => {
     const result = fme.sum(moneys[0], moneys[1]);
 
     const expected = "R$-10.00";
-    const formattedResult = `R$${result.getValue().toFixed(2)}`;
+    const formattedResult = `${result.toReal()}`;
 
     assertEquals(formattedResult, expected);
 });
@@ -31,7 +31,7 @@ Deno.test("3 - Verify the result of the sum with zero", () => {
     const result = fme.sum(moneys[0], moneys[1]);
 
     const expected = "R$4.00";
-    const formattedResult = `R$${result.getValue().toFixed(2)}`;
+    const formattedResult = `${result.toReal()}`;
 
     assertEquals(formattedResult, expected);
 });
@@ -41,7 +41,7 @@ Deno.test("4 - Verify the result of the subtraction of two numbers", () => {
     const result = fme.subtract(moneys[0], moneys[1]);
 
     const expected = "R$2.00";
-    const formattedResult = `R$${result.getValue().toFixed(2)}`;
+    const formattedResult = `${result.toReal()}`;
 
     assertEquals(formattedResult, expected);
 });
@@ -51,7 +51,7 @@ Deno.test("5 - Verify the result of multiplying two numbers", () => {
     const result = fme.multiply(moneys[0], 2);
 
     const expected = "R$4.00";
-    const formattedResult = `R$${result.getValue().toFixed(2)}`;
+    const formattedResult = `${result.toReal()}`;
 
     assertEquals(formattedResult, expected);
 });
@@ -61,7 +61,7 @@ Deno.test("6 - Verify the result of dividing two numbers", () => {
     const result = fme.divide(moneys[0], 3);
 
     const expected = "R$2.00";
-    const formattedResult = `R$${result.getValue().toFixed(2)}`;
+    const formattedResult = `${result.toReal()}`;
 
     assertEquals(formattedResult, expected);
 });

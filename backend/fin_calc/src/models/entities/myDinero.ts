@@ -1,6 +1,6 @@
 import dinero from "../../dependencies/number.deps.ts";
 import IMoney from "../interfaces/IMoney.ts";
-import InvalidArgumentError from "../../Exceptions/operations.execption.ts";
+import {InvalidArgumentError} from "../../Exceptions/operations.execption.ts";
 import DivideByZeroError from "../../Exceptions/math.exceptions.ts"
 import { threadId } from "node:worker_threads";
 
