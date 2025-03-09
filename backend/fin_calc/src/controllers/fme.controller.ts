@@ -4,25 +4,32 @@ import Fme from "../models/operations/fme.ts";
 
 export default class FmeController {
     fme = new Fme()
-    public GetSum(ctx: RouterContext<string, { value1: string, value2: string }, Record<string, object>>) {
+    getArrFromUrl(ctx: RouterContext<string, { value1: string, value2: string }, Record<string, object>>) {
         const main = new MyDinero(parseFloat(ctx.params.value1));
         const other = new MyDinero(parseFloat(ctx.params.value2));
       
-        ctx.response.body = this.fme.sum(main,other).toReal()
-    }
-    public GetSubtract(ctx: RouterContext<string, { value1: string, value2: string }, Record<string, object>>) {
-        const main = new MyDinero(parseFloat(ctx.params.value1));
-        const other = new MyDinero(parseFloat(ctx.params.value2));
+        return [main, other];
+      }
+      
+      public sum(ctx: RouterContext<string, { value1: string, value2: string }, Record<string, object>>) {
+        const [main, other] = this.getArrFromUrl(ctx);
+      
+        ctx.response.body = this.fme.sum(main, other).toReal();
+      }
+      
+
+    public subtract(ctx: RouterContext<string, { value1: string, value2: string }, Record<string, object>>) {
+        const [main, other] = this.getArrFromUrl(ctx);
       
         ctx.response.body = this.fme.subtract(main,other).toReal()
     }
-    public GetMultiply(ctx: RouterContext<string, { value1: string, value2: string }, Record<string, object>>) {
+    public multiply(ctx: RouterContext<string, { value1: string, value2: string }, Record<string, object>>) {
         const main = new MyDinero(parseFloat(ctx.params.value1));
         const other = parseFloat(ctx.params.value2);
       
-        ctx.response.body = this.fme.multiply(main,other).toReal() 
+        ctx.response.body = this.fme.multiply(main,other).getAmount()
     }
-    public GetDivide(ctx: RouterContext<string, { value1: string, value2: string }, Record<string, object>>) {
+    public divide(ctx: RouterContext<string, { value1: string, value2: string }, Record<string, object>>) {
         const main = new MyDinero(parseFloat(ctx.params.value1));
         const other = parseFloat(ctx.params.value2);
       

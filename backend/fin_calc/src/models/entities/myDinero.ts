@@ -2,6 +2,7 @@ import dinero from "../../dependencies/number.deps.ts";
 import IMoney from "../interfaces/IMoney.ts";
 import InvalidArgumentError from "../../Exceptions/operations.execption.ts";
 import DivideByZeroError from "../../Exceptions/math.exceptions.ts"
+import { threadId } from "node:worker_threads";
 
 export default class MyDinero implements IMoney {
     public din: any;
@@ -13,15 +14,23 @@ export default class MyDinero implements IMoney {
         this.din = dinero({ amount: value, currency, locale, precision });
     }
 
+    
+    setFloat():number{
+        const str = `${this.getAmount()/100}`
+        const pos = str.length - 3;
+        const befere = str.slice(0, pos + 1);
+        const after = str.slice(pos + 1);
+        const newStr = befere + "," + after;
+        return parseFloat(newStr)
+    }
+
     getAmount(): number {
         return this.din.getAmount();
     }
 
     getValue(): number {
-        return this.din.getAmount()/(100*100);
-    }
-
-    
+        return this.setFloat();
+    }    
 
     getCurrency(): string {
         return this.din.getCurrency();
@@ -88,7 +97,8 @@ export default class MyDinero implements IMoney {
     }
 
     toReal(): string {
-        return `R$${this.getValue().toFixed(2)}`;
+        const str = this.setFloat()
+        return `R$${str.toFixed(2)}`;
     }
 
     toUnit(): number {

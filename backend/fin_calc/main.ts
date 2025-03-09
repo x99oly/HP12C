@@ -18,3 +18,6 @@ app.use(router.allowedMethods());
 
 await app.listen({ port: port });
 console.log("Server running on http://localhost:8000");
+
+// Para rodar testes
+// deno test --allow-read --allow-net --allow-env --allow-import
