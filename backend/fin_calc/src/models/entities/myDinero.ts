@@ -6,12 +6,14 @@ import DivideByZeroError from "../../Exceptions/math.exceptions.ts"
 export default class MyDinero implements IMoney {
     public din: any;
     private format: string = '$0,0.00'
+    private uuid: string
 
     constructor(value: number, isConverted: boolean = false, currency: string = 'BRL', locale: string = 'pt-BR', precision: number = 2) {
-        if (isNaN(value)) throw new InvalidArgumentError("Não é permitido iniciar MyDinero com valores não numéricos.")
+        if (typeof value !== 'number' || isNaN(value)) throw new InvalidArgumentError("Não é permitido iniciar MyDinero com valores não numéricos.")
         
         if (!isConverted) value = value*100;
-  
+
+        this.uuid = crypto.randomUUID()
         this.din = dinero({ amount: value, currency, precision });
         this.din.setLocale(locale)
     }
@@ -41,7 +43,7 @@ export default class MyDinero implements IMoney {
     }
 
     equalsTo(other: IMoney): boolean {
-        return this.din.equalsTo(other.getInstance());
+        return this.getID() === other.getID();
     }
 
     lessThan(other: IMoney): boolean {
@@ -145,5 +147,7 @@ export default class MyDinero implements IMoney {
       definition.push(`regionalização: ${this.getLocale()}`)
       return definition.join(' | ')
     }
+
+    getID = (): string => this.uuid;
 
 }

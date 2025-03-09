@@ -1,6 +1,7 @@
 export default interface IMoney {
     getInstance(): object
     setFormat(format:string):void
+    getID():string
 
     getAmount(): number; // return the integer one
     getCurrency(): string;
