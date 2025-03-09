@@ -25,14 +25,17 @@ export default class FmeController {
             });
 
             let zero: IMoney = moneyArr[0]
+            console.log(zero.getAmount())
             moneyArr.forEach( e => {
                 if (!e.equalsTo(zero)){
+                    console.log("entrou")
                     zero = this.fme.sum(zero, e)
                 }
+                console.log("zero-amount: "+zero.getAmount()+" zero-value: "+zero.getValue())
             })
             
             ctx.response.status = 200;
-            ctx.response.body = { message: 'Requisição processada com sucesso.', data: zero.getValue() };
+            ctx.response.body = { message: 'Requisição processada com sucesso.', data: zero.toReal() };
         } catch (error) {
             ctx.response.status = 500;
             ctx.response.body = { message: 'Erro interno do servidor.', error: error };

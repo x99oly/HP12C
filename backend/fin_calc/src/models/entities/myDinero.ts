@@ -17,7 +17,7 @@ export default class MyDinero implements IMoney {
     
     setFloat():number{
         const str = `${this.getAmount()/100}`
-        const pos = str.length - 3;
+        const pos = str.length - 2;
         const befere = str.slice(0, pos + 1);
         const after = str.slice(pos + 1);
         const newStr = befere + "." + after;
