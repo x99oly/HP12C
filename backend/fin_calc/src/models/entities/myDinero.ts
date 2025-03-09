@@ -2,7 +2,6 @@ import dinero from "../../dependencies/number.deps.ts";
 import IMoney from "../interfaces/IMoney.ts";
 import {InvalidArgumentError} from "../../Exceptions/operations.execption.ts";
 import DivideByZeroError from "../../Exceptions/math.exceptions.ts"
-import { Z_ASCII } from "node:zlib";
 
 export default class MyDinero implements IMoney {
     public din: any;
@@ -47,46 +46,6 @@ export default class MyDinero implements IMoney {
         return this.getID() === other.getID();
     }
 
-    lessThan(other: IMoney): boolean {
-        return this.din.lessThan(other.getInstance());
-    }
-
-    lessThanOrEqual(other: IMoney): boolean {
-        return this.din.lessThanOrEqual(other.getInstance());
-    }
-
-    greaterThan(other: IMoney): boolean {
-        return this.din.greaterThan(other.getInstance());
-    }
-
-    greaterThanOrEqual(other: IMoney): boolean {
-        return this.din.greaterThanOrEqual(other.getInstance());
-    }
-
-    isZero(): boolean {
-        return this.din.isZero();
-    }
-
-    isPositive(): boolean {
-        return this.din.isPositive();
-    }
-
-    isNegative(): boolean {
-        return this.din.isNegative();
-    }
-
-    hasSubUnits(): boolean {
-        return this.din.hasSubUnits();
-    }
-
-    hasSameCurrency(other: IMoney): boolean {
-        return this.din.hasSameCurrency(other.getInstance());
-    }
-
-    hasSameAmount(other: IMoney): boolean {
-        return this.din.hasSameAmount(other.getInstance());
-    }
-
     setLocale(locale: string): void {
         this.din.setLocale(locale);
     }
@@ -99,24 +58,8 @@ export default class MyDinero implements IMoney {
         return this.din.toUnit();
     }
 
-    toRoundedUnit(): number {
-        return this.din.toRoundedUnit();
-    }
-
-    toObject(): object {
-        return this.din.toObject();
-    }
-
-    toJSON(): string {
-        return this.din.toJSON();
-    }
-
-    convertPrecision(precision: number): IMoney {
-        return new MyDinero(this.din.convertPrecision(precision).getAmount());
-    }
-
-    normalizePrecision(): IMoney {
-        return new MyDinero(this.din.normalizePrecision().getAmount());
+    convertPrecision(precision: number): number {
+        return this.din.convertPrecision(precision);
     }
 
     getInstance(): typeof dinero {
