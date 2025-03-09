@@ -22,16 +22,16 @@ export default class FmeController {
     public multiply(ctx: RouterContext<string, { value1: string, value2: string }, Record<string, object>>) {
         const [main, other] = this.getArrFromUrl(ctx);
       
-        ctx.response.body = this.fme.multiply(main,(other.getAmount()/100)).getAmount()
+        ctx.response.body = this.fme.multiply(main,(other.getAmount())).toFormat()
     }
     public divide(ctx: RouterContext<string, { value1: string, value2: string }, Record<string, object>>) {
         const [main, other] = this.getArrFromUrl(ctx);
       
-        ctx.response.body = this.fme.divide(main,(other.getAmount()/100)).toFormat()
+        ctx.response.body = this.fme.divide(main,(other.getAmount())).toFormat()
     }
 
     // DADOS DO BODY
-
+    
     public async sumBody(ctx: RouterContext<string, { value1: string, value2: string }, Record<string, object>>) {
         await this.exec(this.sumArr.bind(this), ctx);
     }

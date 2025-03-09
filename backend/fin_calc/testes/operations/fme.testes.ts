@@ -186,3 +186,57 @@ Deno.test("17 - Verify the result of dividing by a value that is not a number", 
 Deno.test("18 - Verify the result of sum with a value that is not a number", () => {
     assertThrows(() => new MyDinero("abc" as any), Error, "Não é permitido iniciar MyDinero com valores não numéricos.");
 });
+
+Deno.test("Verify dividing negative numbers", () => {
+    const moneys = instances(-6, 2);
+    const result = fme.divide(moneys[0], moneys[1].toUnit());
+
+    const expected = "-R$3.00";
+    const formattedResult = `${result.toFormat()}`;
+
+    assertEquals(formattedResult, expected);
+});
+
+Deno.test("Verify dividing floating point numbers", () => {
+    const moneys = instances(5.5, 2);
+    const result = fme.divide(moneys[0], moneys[1].toUnit());
+
+    const expected = "R$2.75";
+    const formattedResult = `${result.toFormat()}`;
+
+    assertEquals(formattedResult, expected);
+});
+
+Deno.test("Verify dividing by 1", () => {
+    const moneys = instances(6, 1);
+    const result = fme.divide(moneys[0], moneys[1].toUnit());
+
+    const expected = "R$6.00";
+    const formattedResult = `${result.toFormat()}`;
+
+    assertEquals(formattedResult, expected);
+});
+
+Deno.test("Verify dividing 0 by a number", () => {
+    const moneys = instances(0, 2);
+    const result = fme.divide(moneys[0], moneys[1].toUnit());
+
+    const expected = "R$0.00";
+    const formattedResult = `${result.toFormat()}`;
+
+    assertEquals(formattedResult, expected);
+});
+
+Deno.test("Verify dividing very small numbers", () => {
+    const moneys = instances(0.000001, 2);
+    const result = fme.divide(moneys[0], moneys[1].toUnit());
+
+    const expected = "R$0.00"; // Dependendo da precisão esperada
+    const formattedResult = `${result.toFormat()}`;
+
+    assertEquals(formattedResult, expected);
+});
+
+
+
+

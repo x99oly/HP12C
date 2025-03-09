@@ -2,6 +2,7 @@ import dinero from "../../dependencies/number.deps.ts";
 import IMoney from "../interfaces/IMoney.ts";
 import {InvalidArgumentError} from "../../Exceptions/operations.execption.ts";
 import DivideByZeroError from "../../Exceptions/math.exceptions.ts"
+import { Z_ASCII } from "node:zlib";
 
 export default class MyDinero implements IMoney {
     public din: any;
@@ -131,7 +132,7 @@ export default class MyDinero implements IMoney {
     }
 
     multiply(factor: number): IMoney {
-        return new MyDinero(this.din.multiply(factor).getAmount(), true);
+        return new MyDinero(this.din.multiply(factor).toUnit(), false);
     }
 
     divide(divisor: number): IMoney {

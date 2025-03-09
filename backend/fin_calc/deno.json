@@ -8,7 +8,8 @@
   },
     "test": {
       "include" : [
-        "testes/operations/fme.testes.ts"
+        "testes/operations/fme.testes.ts",
+        "testes/aid/IMoneyAid.tests.ts"
       ]
     }
 }

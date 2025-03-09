@@ -2,6 +2,9 @@
 // deno run --allow-all --watch main.ts
 // Para rodar testes
 // deno test --allow-read --allow-net --allow-env --allow-import
+// Para rodar específico
+// deno test --allow-read --allow-net --allow-env --allow-import testes/aid/IMoneyAid.tests.ts
+
 
 import { Application, Router } from "./src/dependencies/requisition.deps.ts";
 import calcRouter from "./src/routes/calcRouter.ts";
