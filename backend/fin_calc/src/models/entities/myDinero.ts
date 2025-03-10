@@ -21,6 +21,10 @@ export default class MyDinero implements IMoney {
         this.din.setLocale(locale)
     }
 
+    percentagem(percent:number): number {
+        return (this.getAmount() * (percent/100))/100
+    }
+
     getIMoney(num: number): IMoney {
       return new MyDinero(num)
     }

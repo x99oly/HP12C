@@ -73,6 +73,7 @@ export default class Fme implements IFme {
         })
         return zero
     }
-    
+
+    percent = (instance: IMoney, percent:number):number => instance.percentagem(percent)
 
 }

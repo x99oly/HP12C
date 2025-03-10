@@ -286,3 +286,17 @@ Deno.test("25 - Verify the root of a number", () => {
     "Radicando não pode ser 0.")
 });
 
+// PERCENTUAL
+
+Deno.test("26 - Verifying the right value for percentual values", () => {
+    const moneys = instances(100, 5)
+
+    const a: number = fme.percent(moneys[0], 50)
+    const b: number = fme.percent(moneys[0], 95.5)
+    const c: number = fme.percent(moneys[1], 50)
+
+    assertEquals(a, 50)
+    assertEquals(b, 95.5)
+    assertEquals(c, 2.5)
+})
+

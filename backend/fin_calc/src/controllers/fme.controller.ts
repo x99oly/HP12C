@@ -57,6 +57,10 @@ export default class FmeController {
         await this.exec(this.rootOfAux.bind(this), ctx)        
     }
 
+    public async percentual(ctx: RouterContext<string, { value1: string, value2: string }, Record<string, object>>){
+        await this.exec(this.percentOfAux.bind(this), ctx)        
+    }
+
     // FUNÇÕES AUXILIÁRES => privadas
         
     private async exec(
@@ -216,6 +220,20 @@ export default class FmeController {
         if (req.mainValue && req.secValue){
             const main:IMoney = IMoneyAid.getImoney(req.mainValue, false, req.currency, req.precision)
             ctx.response.body = this.fme.rootOf(main, req.secValue).toJSON()
+        }else{
+            ctx.response.status = 400
+            ctx.response.body = "Não há dados a serem tratados."
+        }
+    }
+
+    private async percentOfAux(
+        ctx: RouterContext<string, { value1: string, value2: string }, Record<string, object>>
+    ): Promise<void> {
+        const req:FmeObject = (await this.getObjFromBody(ctx))
+
+        if (req.mainValue && req.secValue){
+            const main:IMoney = IMoneyAid.getImoney(req.mainValue, false, req.currency, req.precision)
+            ctx.response.body = this.fme.percent(main, req.secValue)
         }else{
             ctx.response.status = 400
             ctx.response.body = "Não há dados a serem tratados."

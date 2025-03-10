@@ -22,6 +22,8 @@ export default interface IMoney {
     divide(other: number): IMoney;
     toJSON(): object;
 
+    percentagem(percent:number): number
+
     toString(): string
 
 }

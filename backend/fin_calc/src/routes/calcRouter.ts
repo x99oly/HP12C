@@ -26,4 +26,7 @@ calcRouter.post("/fme.power", fmeController.powerOf.bind(fmeController));
 // Raíz
 calcRouter.post("/fme.root", fmeController.rootOf.bind(fmeController));
 
+// Percentual
+calcRouter.post("/fme.percentual", fmeController.percentual.bind(fmeController))
+
 export default calcRouter;
