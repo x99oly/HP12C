@@ -1,8 +1,7 @@
 import { RouterContext} from "../dependencies/requisition.deps.ts";
-import MyDinero from "../models/entities/myDinero.ts";
 import Fme from "../models/operations/fme.ts";
 import IMoney from "../models/interfaces/IMoney.ts";
-import IMoneyAid from "../models/aid/getImony.ts";
+import IMoneyAid from "../models/aid/imoneyAid.ts";
 import { InvalidArgumentError } from "../Exceptions/operations.execption.ts";
 import FmeObject from "../models/entities/fmeObject.ts";
 
@@ -173,8 +172,8 @@ export default class FmeController {
     private getArrFromUrl = (
         ctx: RouterContext<string, { value1: string, value2: string }, Record<string, object>>
     ) : IMoney[] => {
-        const main = new MyDinero(parseFloat(ctx.params.value1));
-        const other = new MyDinero(parseFloat(ctx.params.value2));
+        const main = IMoneyAid.getImoney(parseFloat(ctx.params.value1));
+        const other = IMoneyAid.getImoney(parseFloat(ctx.params.value2));
       
         return [main, other];
     }

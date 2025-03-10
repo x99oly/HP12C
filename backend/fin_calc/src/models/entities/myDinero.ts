@@ -22,6 +22,8 @@ export default class MyDinero implements IMoney {
     }
 
     percentagem(percent:number): number {
+        if (percent < 0 || percent > 100)
+            throw new InvalidArgumentError("O valor percentual deve estar contido entre 0 e 100.")
         return (this.getAmount() * (percent/100))/100
     }
 

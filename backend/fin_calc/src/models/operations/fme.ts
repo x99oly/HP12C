@@ -1,9 +1,8 @@
-import IFme from "../interfaces/IFme.ts";
 import IMoney from "../interfaces/IMoney.ts";
-import IMoneyAid from "../aid/getImony.ts";
+import IMoneyAid from "../aid/imoneyAid.ts";
 import { InvalidArgumentError } from "../../Exceptions/operations.execption.ts";
 
-export default class Fme implements IFme {    
+export default class Fme{    
 
     sum = (addend: IMoney, adder: IMoney): IMoney => addend.sum(adder)
 

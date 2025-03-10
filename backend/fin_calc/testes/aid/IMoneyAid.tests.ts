@@ -1,5 +1,6 @@
 import { assertEquals, assertThrows } from "https://deno.land/std@0.192.0/testing/asserts.ts";
-import IMoneyAid from "../../src/models/aid/getImony.ts";
+import IMoneyAid from "../../src/models/aid/imoneyAid.ts";
+import { AssertionError } from "@std/assert/assertion-error";
 
 Deno.test("1 - Verify the returning of 'isFloat' for integers", () =>{
     const bo1: boolean = IMoneyAid.isFloat(10)
@@ -10,3 +11,16 @@ Deno.test("1 - Verify the returning of 'isFloat' for integers", () =>{
     assertEquals(bo2, false)
     assertEquals(bo3, true)
 })
+
+Deno.test("2 - Verifying the returning of a string cast to int number.", ()=>{
+    const a:string = "5"
+    const b:string = "5.5"
+    const c:string = "-19.25"
+    const d:string = "not.number"
+
+    assertEquals(IMoneyAid.getIntFromString(a),5)
+    assertEquals(IMoneyAid.getIntFromString(b),55)
+    assertEquals(IMoneyAid.getIntFromString(c), -1925)
+    assertEquals(IMoneyAid.getIntFromString(d), NaN)
+
+} )
