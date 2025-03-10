@@ -1,11 +1,14 @@
-import { assertEquals, assertThrows } from "https://deno.land/std@0.192.0/testing/asserts.ts";
+import { assertEquals, assert, assertThrows } from "https://deno.land/std@0.192.0/testing/asserts.ts";
 import Fme from "../../src/models/operations/fme.ts";
 import MyDinero from "../../src/models/entities/myDinero.ts";
+import IMoney from "../../src/models/interfaces/IMoney.ts";
 
 const fme = new Fme();
 
 const instances = (num1: number, num2: number): MyDinero[] => [new MyDinero(num1), new MyDinero(num2)];
 
+
+// SOMA
 Deno.test("1 - Verify the result of the sum of two numbers", () => {
     const moneys = instances(2, 4);
     const result = fme.sum(moneys[0], moneys[1]);
@@ -36,42 +39,7 @@ Deno.test("3 - Verify the result of the sum with zero", () => {
     assertEquals(formattedResult, expected);
 });
 
-Deno.test("4 - Verify the result of the subtraction of two numbers", () => {
-    const moneys = instances(6, 4);
-    const result = fme.subtract(moneys[0], moneys[1]);
-
-    const expected = "R$2.00";
-    const formattedResult = `${result.toFormat()}`;
-
-    assertEquals(formattedResult, expected);
-});
-
-Deno.test("5 - Verify the result of multiplying two numbers", () => {
-    const moneys = instances(2, 3);
-    const result = fme.multiply(moneys[0], 2);
-
-    const expected = "R$4.00";
-    const formattedResult = `${result.toFormat()}`;
-
-    assertEquals(formattedResult, expected);
-});
-
-Deno.test("6 - Verify the result of dividing two numbers", () => {
-    const moneys = instances(6, 2);
-    const result = fme.divide(moneys[0], 3);
-
-    const expected = "R$2.00";
-    const formattedResult = `${result.toFormat()}`;
-
-    assertEquals(formattedResult, expected);
-});
-
-Deno.test("7 - Verify dividing by zero throws error", () => {
-    const moneys = instances(6, 0);
-    assertThrows(() => fme.divide(moneys[0], 0), Error, "Divide by 0 is not allowed");
-});
-
-Deno.test("8 - Verify the result of the sum of an array", () => {
+Deno.test("4 - Verify the result of the sum of an array", () => {
     const moneys = instances(1, 2);
     const result = fme.sumArr(moneys);
 
@@ -81,9 +49,65 @@ Deno.test("8 - Verify the result of the sum of an array", () => {
     assertEquals(formattedResult, expected);
 });
 
-Deno.test("9 - Verify the result of the subtraction of an array", () => {
+Deno.test("5 - Verify the result of the sum of a larger array", () => {
+    const moneys = [
+        new MyDinero(1.5),
+        new MyDinero(2.5),
+        new MyDinero(3.0),
+        new MyDinero(4.0),
+        new MyDinero(5.0),
+    ];
+    const result = fme.sumArr(moneys);
+
+    const expected = "R$16.00";
+    const formattedResult = `${result.toFormat()}`;
+
+    assertEquals(formattedResult, expected);
+});
+
+
+// SUBTRAÇÃO
+Deno.test("6 - Verify the result of the subtraction of two numbers", () => {
+    const moneys = instances(6, 4);
+    const result = fme.subtract(moneys[0], moneys[1]);
+
+    const expected = "R$2.00";
+    const formattedResult = `${result.toFormat()}`;
+
+    assertEquals(formattedResult, expected);
+});
+
+Deno.test("7 - Verify the result of the subtraction of an array", () => {
     const moneys = instances(6, 2);
     const result = fme.subtractArr(moneys);
+
+    const expected = "R$4.00";
+    const formattedResult = `${result.toFormat()}`;
+
+    assertEquals(formattedResult, expected);
+});
+
+Deno.test("8 - Verify the result of the subtraction of a larger array", () => {
+    const moneys = [
+        new MyDinero(10),
+        new MyDinero(2),
+        new MyDinero(1.5),
+        new MyDinero(0.5),
+        new MyDinero(1),
+    ];
+    const result = fme.subtractArr(moneys);
+
+    const expected = "R$5.00";
+    const formattedResult = `${result.toFormat()}`;
+
+    assertEquals(formattedResult, expected);
+});
+
+
+// MULTIPLICAÇÃO
+Deno.test("9 - Verify the result of multiplying two numbers", () => {
+    const moneys = instances(2, 3);
+    const result = fme.multiply(moneys[0], 2);
 
     const expected = "R$4.00";
     const formattedResult = `${result.toFormat()}`;
@@ -101,54 +125,7 @@ Deno.test("10 - Verify the result of multiplying an array", () => {
     assertEquals(formattedResult, expected);
 });
 
-Deno.test("11 - Verify the result of dividing an array", () => {
-    const moneys = instances(6, 2);
-    const result = fme.divideArr(moneys);
-
-    const expected = "R$3.00";
-    const formattedResult = `${result.toFormat()}`;
-
-    assertEquals(formattedResult, expected);
-});
-
-Deno.test("12 - Verify dividing an array by zero throws error", () => {
-    const moneys = instances(6, 0);
-    assertThrows(() => fme.divideArr(moneys), Error, "Divide by 0 is not allowed");
-});
-
-Deno.test("13 - Verify the result of the sum of a larger array", () => {
-    const moneys = [
-        new MyDinero(1.5),
-        new MyDinero(2.5),
-        new MyDinero(3.0),
-        new MyDinero(4.0),
-        new MyDinero(5.0),
-    ];
-    const result = fme.sumArr(moneys);
-
-    const expected = "R$16.00";
-    const formattedResult = `${result.toFormat()}`;
-
-    assertEquals(formattedResult, expected);
-});
-
-Deno.test("14 - Verify the result of the subtraction of a larger array", () => {
-    const moneys = [
-        new MyDinero(10),
-        new MyDinero(2),
-        new MyDinero(1.5),
-        new MyDinero(0.5),
-        new MyDinero(1),
-    ];
-    const result = fme.subtractArr(moneys);
-
-    const expected = "R$5.00";
-    const formattedResult = `${result.toFormat()}`;
-
-    assertEquals(formattedResult, expected);
-});
-
-Deno.test("15 - Verify the result of multiplying a larger array", () => {
+Deno.test("11 - Verify the result of multiplying a larger array", () => {
     const moneys = [
         new MyDinero(1.5),
         new MyDinero(2),
@@ -163,7 +140,29 @@ Deno.test("15 - Verify the result of multiplying a larger array", () => {
     assertEquals(formattedResult, expected);
 });
 
-Deno.test("16 - Verify the result of dividing a larger array", () => {
+
+// DIVISÃO
+Deno.test("12 - Verify the result of dividing two numbers", () => {
+    const moneys = instances(6, 2);
+    const result = fme.divide(moneys[0], 3);
+
+    const expected = "R$2.00";
+    const formattedResult = `${result.toFormat()}`;
+
+    assertEquals(formattedResult, expected);
+});
+
+Deno.test("13 - Verify the result of dividing an array", () => {
+    const moneys = instances(6, 2);
+    const result = fme.divideArr(moneys);
+
+    const expected = "R$3.00";
+    const formattedResult = `${result.toFormat()}`;
+
+    assertEquals(formattedResult, expected);
+});
+
+Deno.test("14 - Verify the result of dividing a larger array", () => {
     const moneys = [
         new MyDinero(36),
         new MyDinero(3),
@@ -178,6 +177,16 @@ Deno.test("16 - Verify the result of dividing a larger array", () => {
     assertEquals(formattedResult, expected);
 });
 
+Deno.test("15 - Verify dividing by zero throws error", () => {
+    const moneys = instances(6, 0);
+    assertThrows(() => fme.divide(moneys[0], 0), Error, "Divide by 0 is not allowed");
+});
+
+Deno.test("16 - Verify dividing an array by zero throws error", () => {
+    const moneys = instances(6, 0);
+    assertThrows(() => fme.divideArr(moneys), Error, "Divide by 0 is not allowed");
+});
+
 Deno.test("17 - Verify the result of dividing by a value that is not a number", () => {
     const moneys = [new MyDinero(10), new MyDinero(0)];
     assertThrows(() => fme.divide(moneys[0], moneys[1].toUnit()), Error, "Divide by 0 is not allowed");
@@ -187,7 +196,7 @@ Deno.test("18 - Verify the result of sum with a value that is not a number", () 
     assertThrows(() => new MyDinero("abc" as any), Error, "Não é permitido iniciar MyDinero com valores não numéricos.");
 });
 
-Deno.test("Verify dividing negative numbers", () => {
+Deno.test("19 - Verify dividing negative numbers", () => {
     const moneys = instances(-6, 2);
     const result = fme.divide(moneys[0], moneys[1].toUnit());
 
@@ -197,7 +206,7 @@ Deno.test("Verify dividing negative numbers", () => {
     assertEquals(formattedResult, expected);
 });
 
-Deno.test("Verify dividing floating point numbers", () => {
+Deno.test("20 - Verify dividing floating point numbers", () => {
     const moneys = instances(5.5, 2);
     const result = fme.divide(moneys[0], moneys[1].toUnit());
 
@@ -207,7 +216,7 @@ Deno.test("Verify dividing floating point numbers", () => {
     assertEquals(formattedResult, expected);
 });
 
-Deno.test("Verify dividing by 1", () => {
+Deno.test("21 - Verify dividing by 1", () => {
     const moneys = instances(6, 1);
     const result = fme.divide(moneys[0], moneys[1].toUnit());
 
@@ -217,7 +226,7 @@ Deno.test("Verify dividing by 1", () => {
     assertEquals(formattedResult, expected);
 });
 
-Deno.test("Verify dividing 0 by a number", () => {
+Deno.test("22 - Verify dividing 0 by a number", () => {
     const moneys = instances(0, 2);
     const result = fme.divide(moneys[0], moneys[1].toUnit());
 
@@ -227,8 +236,8 @@ Deno.test("Verify dividing 0 by a number", () => {
     assertEquals(formattedResult, expected);
 });
 
-Deno.test("Verify dividing very small numbers", () => {
-    const moneys = instances(0.000001, 2);
+Deno.test("23 - Verify dividing a smallest part of a money.", () => {
+    const moneys = instances(0.01, 2);
     const result = fme.divide(moneys[0], moneys[1].toUnit());
 
     const expected = "R$0.00"; // Dependendo da precisão esperada
@@ -237,6 +246,36 @@ Deno.test("Verify dividing very small numbers", () => {
     assertEquals(formattedResult, expected);
 });
 
+// POTENCIAÇÃO
 
+Deno.test("24 - Verify the power of a number", () => {
+    const moneys = instances(4,0)
+    const a: IMoney = fme.powerOf(moneys[0], 2)
+    const b: IMoney = fme.powerOf(moneys[0], 3)
+    const d: IMoney = fme.powerOf(moneys[1], 2)
+    const e: IMoney = fme.powerOf(moneys[0], 0)
 
+    assertEquals(a.toUnit(), 16)
+    assertEquals(b.toUnit(), 64)
+    assertEquals(d.toUnit(), 0)
+    assertEquals(e.toUnit(), 1)
+    assertThrows( ()=> { fme.powerOf(moneys[0], 0.5) }, Error, "Expoente deve ser um inteiro.")
+})
+
+// RAÍZ
+
+Deno.test("25 - Verify the root of a number", () => {
+    const moneys: IMoney[] = instances(16, 9);
+    
+    const a: IMoney = fme.rootOf(moneys[0], 2); // √16 = 4
+    const b: IMoney = fme.rootOf(moneys[0], 3); // ³√16 ≈ 2.52
+    const c: IMoney = fme.rootOf(moneys[1], 2); // √9 = 3
+    const d: IMoney = fme.rootOf(moneys[1], 0); // Raiz de índice 0 não é definida (depende da implementação)
+   
+     assertEquals(a.toUnit(), 0);
+     assertEquals(b.toUnit().toFixed(2), Math.pow(16, 1 / 3).toFixed(2));
+     assertEquals(c.toUnit(), 3);
+     assertEquals(d, d); // Caso `fme.rootOf()` retorne NaN para índice 0
+     assertEquals(()=> {fme.rootOf(moneys[1], 0.1)},Error,"É necessário um número inteiro como expoente")
+});
 

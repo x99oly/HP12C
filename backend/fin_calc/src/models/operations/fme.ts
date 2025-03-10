@@ -2,6 +2,7 @@ import { basename } from "node:path";
 import IFme from "../interfaces/IFme.ts";
 import IMoney from "../interfaces/IMoney.ts";
 import IMoneyAid from "../aid/getImony.ts";
+import { InvalidArgumentError } from "../../Exceptions/operations.execption.ts";
 
 export default class Fme implements IFme {    
 
@@ -11,12 +12,22 @@ export default class Fme implements IFme {
 
     multiply = (addend: IMoney, count: number): IMoney => addend.multiply(count)
 
-    divide = (addend: IMoney, count: number): IMoney => addend.divide(count)
+    divide = (addend: IMoney, count: number): IMoney =>  addend.divide(count)
 
-    powerOf = (base: IMoney, exponent: number): IMoney => {
-        let num: number = base.getAmount() ** exponent
+    powerOf = (base: IMoney, exponent: number): IMoney  => {
+        if (IMoneyAid.isFloat(exponent))
+            throw new InvalidArgumentError("Expoente deve ser um inteiro.")
+        let num: number = Math.pow(base.toUnit(), exponent)
         if (IMoneyAid.isFloat(num)){
-            num = Math.round(num * base.getPrecision())
+            num = Math.round(num * base.getScalePrecision())
+        }
+        return IMoneyAid.getImoney(num)
+    }
+
+    rootOf = (index: IMoney, radicand: number): IMoney => {
+        let num: number = index.toUnit() ** ( 1/radicand )
+        if (IMoneyAid.isFloat(num)){
+            num = Math.round(num * index.getScalePrecision())
         }
         return IMoneyAid.getImoney(num)
     }
