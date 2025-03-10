@@ -12,23 +12,23 @@ export default class FmeController {
     public sum(ctx: RouterContext<string, { value1: string, value2: string }, Record<string, object>>) {
         const [main, other] = this.getArrFromUrl(ctx);
       
-        ctx.response.body = this.fme.sum(main, other).toFormat();
+        ctx.response.body = this.fme.sum(main, other).toJSON();
     } 
     
     public subtract(ctx: RouterContext<string, { value1: string, value2: string }, Record<string, object>>) {
         const [main, other] = this.getArrFromUrl(ctx);
       
-        ctx.response.body = this.fme.subtract(main,other).toFormat()
+        ctx.response.body = this.fme.subtract(main,other).toJSON()
     }
     public multiply(ctx: RouterContext<string, { value1: string, value2: string }, Record<string, object>>) {
         const [main, other] = this.getArrFromUrl(ctx);
       
-        ctx.response.body = this.fme.multiply(main,(other.getAmount())).toFormat()
+        ctx.response.body = this.fme.multiply(main,(other.toUnit())).toJSON()
     }
     public divide(ctx: RouterContext<string, { value1: string, value2: string }, Record<string, object>>) {
         const [main, other] = this.getArrFromUrl(ctx);
       
-        ctx.response.body = this.fme.divide(main,(other.getAmount())).toFormat()
+        ctx.response.body = this.fme.divide(main,(other.toUnit())).toJSON()
     }
 
     // DADOS DO BODY
@@ -76,37 +76,95 @@ export default class FmeController {
         }
     } 
 
+    private getIMoney = (value:number, req:FmeObject):IMoney => IMoneyAid.getImoney(
+        value , false, req.currency, req.precision
+    )
+
     private async sumArr(
         ctx: RouterContext<string, { value1: string, value2: string }, Record<string, object>>
-    ): Promise<void> {        
-        const moneyArr: IMoney[] = await this.getArrFromBody(ctx);
-        const instance: IMoney = this.fme.sumArr(moneyArr)
-        ctx.response.body = { result : instance.toJSON() };
+    ): Promise<void> {       
+        const moneyArr: IMoney[] = []
+    
+        const req: FmeObject = await this.getObjFromBody(ctx)
+    
+        if (req.mainValue && req.secValue) {
+            moneyArr.push(this.getIMoney(req.mainValue, req))
+            moneyArr.push(this.getIMoney(req.secValue, req))
+        } else if (req.numbers && req.numbers.length > 0) {
+            req.numbers.forEach((n) => moneyArr.push(this.getIMoney(n, req)))
+        } else {
+            ctx.response.status = 400
+            ctx.response.body = "Não foram enviados dados válidos."
+            return
+        }
+    
+        ctx.response.body = { result: this.fme.sumArr(moneyArr).toJSON() }
     }
-
+    
     private async subtractArr(
         ctx: RouterContext<string, { value1: string, value2: string }, Record<string, object>>
     ): Promise<void> {        
-        const moneyArr: IMoney[] = await this.getArrFromBody(ctx);
+        const req: FmeObject = await this.getObjFromBody(ctx)
+        const moneyArr: IMoney[] = []
+    
+        if (req.mainValue && req.secValue) {
+            moneyArr.push(this.getIMoney(req.mainValue, req))
+            moneyArr.push(this.getIMoney(req.secValue, req))
+        } else if (req.numbers && req.numbers.length > 0) {
+            req.numbers.forEach((n) => moneyArr.push(this.getIMoney(n, req)))
+        } else {
+            ctx.response.status = 400
+            ctx.response.body = "Não foram enviados dados válidos."
+            return
+        }
+    
         const instance: IMoney = this.fme.subtractArr(moneyArr)
-        ctx.response.body = { result : instance.toJSON() };
+        ctx.response.body = { result: instance.toJSON() }
     }
-
+    
     private async multiplyArr(
         ctx: RouterContext<string, { value1: string, value2: string }, Record<string, object>>
     ): Promise<void> {        
-        const moneyArr: IMoney[] = await this.getArrFromBody(ctx);
+        const req: FmeObject = await this.getObjFromBody(ctx)
+        const moneyArr: IMoney[] = []
+    
+        if (req.mainValue && req.secValue) {
+            moneyArr.push(this.getIMoney(req.mainValue, req))
+            moneyArr.push(this.getIMoney(req.secValue, req))
+        } else if (req.numbers && req.numbers.length > 0) {
+            req.numbers.forEach((n) => moneyArr.push(this.getIMoney(n, req)))
+        } else {
+            ctx.response.status = 400
+            ctx.response.body = "Não foram enviados dados válidos."
+            return
+        }
+    
         const instance: IMoney = this.fme.multiplyArr(moneyArr)
-        ctx.response.body = { result : instance.toJSON() };
+        ctx.response.body = { result: instance.toJSON() }
     }
-
+    
     private async divideArr(
         ctx: RouterContext<string, { value1: string, value2: string }, Record<string, object>>
     ): Promise<void> {        
-        const moneyArr: IMoney[] = await this.getArrFromBody(ctx);
+        const req: FmeObject = await this.getObjFromBody(ctx)
+        const moneyArr: IMoney[] = []
+    
+        // Verifica se os valores principais ou números estão presentes
+        if (req.mainValue && req.secValue) {
+            moneyArr.push(this.getIMoney(req.mainValue, req))
+            moneyArr.push(this.getIMoney(req.secValue, req))
+        } else if (req.numbers && req.numbers.length > 0) {
+            req.numbers.forEach((n) => moneyArr.push(this.getIMoney(n, req)))
+        } else {
+            ctx.response.status = 400
+            ctx.response.body = "Não foram enviados dados válidos."
+            return
+        }
+    
         const instance: IMoney = this.fme.divideArr(moneyArr)
-        ctx.response.body = { result : instance.toJSON() };
+        ctx.response.body = { result: instance.toJSON() }
     }
+    
 
     private getArrFromUrl = (
         ctx: RouterContext<string, { value1: string, value2: string }, Record<string, object>>
@@ -140,15 +198,27 @@ export default class FmeController {
         ctx: RouterContext<string, { value1: string, value2: string }, Record<string, object>>
     ): Promise<void> {
         const req:FmeObject = (await this.getObjFromBody(ctx))
-        const main:IMoney = IMoneyAid.getImoney(req.mainValue, false, req.currency, req.precision)
-        ctx.response.body = this.fme.powerOf(main, req.secValue).toJSON()
+
+        if (req.mainValue && req.secValue){
+            const main:IMoney = IMoneyAid.getImoney(req.mainValue, false, req.currency, req.precision)
+            ctx.response.body = this.fme.powerOf(main, req.secValue).toJSON()
+        }else{
+            ctx.response.status = 400
+            ctx.response.body = "Não há dados a serem tratados."
+        }
     }
 
     private async rootOfAux(
         ctx: RouterContext<string, { value1: string, value2: string }, Record<string, object>>
     ): Promise<void> {
         const req:FmeObject = (await this.getObjFromBody(ctx))
-        const main:IMoney = IMoneyAid.getImoney(req.mainValue, false, req.currency, req.precision)
-        ctx.response.body = this.fme.rootOf(main, req.secValue).toJSON()
+
+        if (req.mainValue && req.secValue){
+            const main:IMoney = IMoneyAid.getImoney(req.mainValue, false, req.currency, req.precision)
+            ctx.response.body = this.fme.rootOf(main, req.secValue).toJSON()
+        }else{
+            ctx.response.status = 400
+            ctx.response.body = "Não há dados a serem tratados."
+        }
     }
 }
