@@ -1,4 +1,3 @@
-import { basename } from "node:path";
 import IFme from "../interfaces/IFme.ts";
 import IMoney from "../interfaces/IMoney.ts";
 import IMoneyAid from "../aid/getImony.ts";
@@ -25,6 +24,9 @@ export default class Fme implements IFme {
     }
 
     rootOf = (index: IMoney, radicand: number): IMoney => {
+        if (radicand === 0)
+            throw new InvalidArgumentError("Radicando não pode ser 0.")
+
         let num: number = index.toUnit() ** ( 1/radicand )
         if (IMoneyAid.isFloat(num)){
             num = Math.round(num * index.getScalePrecision())

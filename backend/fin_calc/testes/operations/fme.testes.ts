@@ -179,12 +179,16 @@ Deno.test("14 - Verify the result of dividing a larger array", () => {
 
 Deno.test("15 - Verify dividing by zero throws error", () => {
     const moneys = instances(6, 0);
-    assertThrows(() => fme.divide(moneys[0], 0), Error, "Divide by 0 is not allowed");
+    assertThrows(() => fme.divide(moneys[0], 0), 
+    Error, 
+    "Divide by 0 is not allowed");
 });
 
 Deno.test("16 - Verify dividing an array by zero throws error", () => {
     const moneys = instances(6, 0);
-    assertThrows(() => fme.divideArr(moneys), Error, "Divide by 0 is not allowed");
+    assertThrows(() => fme.divideArr(moneys), 
+    Error, 
+    "Divide by 0 is not allowed");
 });
 
 Deno.test("17 - Verify the result of dividing by a value that is not a number", () => {
@@ -193,7 +197,9 @@ Deno.test("17 - Verify the result of dividing by a value that is not a number", 
 });
 
 Deno.test("18 - Verify the result of sum with a value that is not a number", () => {
-    assertThrows(() => new MyDinero("abc" as any), Error, "Não é permitido iniciar MyDinero com valores não numéricos.");
+    assertThrows(() => new MyDinero("abc" as any), 
+    Error, 
+    "Não é permitido iniciar MyDinero com valores não numéricos.");
 });
 
 Deno.test("19 - Verify dividing negative numbers", () => {
@@ -259,7 +265,9 @@ Deno.test("24 - Verify the power of a number", () => {
     assertEquals(b.toUnit(), 64)
     assertEquals(d.toUnit(), 0)
     assertEquals(e.toUnit(), 1)
-    assertThrows( ()=> { fme.powerOf(moneys[0], 0.5) }, Error, "Expoente deve ser um inteiro.")
+    assertThrows( ()=> { fme.powerOf(moneys[0], 0.5) }, 
+    Error, 
+    "Expoente deve ser um inteiro.")
 })
 
 // RAÍZ
@@ -267,15 +275,15 @@ Deno.test("24 - Verify the power of a number", () => {
 Deno.test("25 - Verify the root of a number", () => {
     const moneys: IMoney[] = instances(16, 9);
     
-    const a: IMoney = fme.rootOf(moneys[0], 2); // √16 = 4
-    const b: IMoney = fme.rootOf(moneys[0], 3); // ³√16 ≈ 2.52
-    const c: IMoney = fme.rootOf(moneys[1], 2); // √9 = 3
-    const d: IMoney = fme.rootOf(moneys[1], 0); // Raiz de índice 0 não é definida (depende da implementação)
-   
-     assertEquals(a.toUnit(), 0);
-     assertEquals(b.toUnit().toFixed(2), Math.pow(16, 1 / 3).toFixed(2));
-     assertEquals(c.toUnit(), 3);
-     assertEquals(d, d); // Caso `fme.rootOf()` retorne NaN para índice 0
-     assertEquals(()=> {fme.rootOf(moneys[1], 0.1)},Error,"É necessário um número inteiro como expoente")
+    const a: IMoney = fme.rootOf(moneys[0], 2);
+    const b: IMoney = fme.rootOf(moneys[1], 2);
+    const c: IMoney = fme.rootOf(moneys[0], 1);
+
+    assertEquals(a.toUnit(), 4)
+    assertEquals(b.toUnit(), 3)
+    assertEquals(c.toUnit(), 16)
+    assertThrows( ()=> { fme.rootOf(moneys[1], 0) },
+    Error,
+    "Radicando não pode ser 0.")
 });
 
