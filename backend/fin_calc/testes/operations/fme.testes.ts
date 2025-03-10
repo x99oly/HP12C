@@ -1,14 +1,14 @@
-import { assertEquals, assert, assertThrows } from "https://deno.land/std@0.192.0/testing/asserts.ts";
+import { assertEquals, assertThrows } from "https://deno.land/std@0.192.0/testing/asserts.ts";
 import Fme from "../../src/models/operations/fme.ts";
 import MyDinero from "../../src/models/entities/myDinero.ts";
 import IMoney from "../../src/models/interfaces/IMoney.ts";
+import IMoneyAid from "../../src/models/aid/imoneyAid.ts";
 
 const fme = new Fme();
 
 const instances = (num1: number, num2: number): MyDinero[] => [new MyDinero(num1), new MyDinero(num2)];
 
-
-// SOMA
+// SOMA 
 Deno.test("1 - Verify the result of the sum of two numbers", () => {
     const moneys = instances(2, 4);
     const result = fme.sum(moneys[0], moneys[1]);
