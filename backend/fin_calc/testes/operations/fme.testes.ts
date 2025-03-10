@@ -260,14 +260,13 @@ Deno.test("24 - Verify the power of a number", () => {
     const b: IMoney = fme.powerOf(moneys[0], 3)
     const d: IMoney = fme.powerOf(moneys[1], 2)
     const e: IMoney = fme.powerOf(moneys[0], 0)
+    const f: IMoney = fme.powerOf(moneys[0], 1.5)
 
     assertEquals(a.toUnit(), 16)
     assertEquals(b.toUnit(), 64)
     assertEquals(d.toUnit(), 0)
     assertEquals(e.toUnit(), 1)
-    assertThrows( ()=> { fme.powerOf(moneys[0], 0.5) }, 
-    Error, 
-    "Expoente deve ser um inteiro.")
+    assertEquals(f.toUnit(), 8)
 })
 
 // RAÍZ

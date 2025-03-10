@@ -20,4 +20,10 @@ calcRouter.post("/fme.multiply", fmeController.multiplyBody.bind(fmeController))
 calcRouter.get("/fme.divide/:value1/:value2", fmeController.divide.bind(fmeController));
 calcRouter.post("/fme.divide", fmeController.divideBody.bind(fmeController));
 
+// Potenciação
+calcRouter.post("/fme.power", fmeController.powerOf.bind(fmeController));
+
+// Raíz
+calcRouter.post("/fme.root", fmeController.rootOf.bind(fmeController));
+
 export default calcRouter;

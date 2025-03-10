@@ -4,6 +4,7 @@ import Fme from "../models/operations/fme.ts";
 import IMoney from "../models/interfaces/IMoney.ts";
 import IMoneyAid from "../models/aid/getImony.ts";
 import { InvalidArgumentError } from "../Exceptions/operations.execption.ts";
+import FmeObject from "../models/entities/fmeObject.ts";
 
 export default class FmeController {
     fme = new Fme()
@@ -46,6 +47,14 @@ export default class FmeController {
 
     public async divideBody(ctx: RouterContext<string, { value1: string, value2: string }, Record<string, object>>) {
         await this.exec(this.divideArr.bind(this), ctx);
+    }
+
+    public async powerOf(ctx: RouterContext<string, { value1: string, value2: string }, Record<string, object>>) {
+        await this.exec(this.powerOfAux.bind(this), ctx)        
+    }
+
+    public async rootOf(ctx: RouterContext<string, { value1: string, value2: string }, Record<string, object>>) {
+        await this.exec(this.rootOfAux.bind(this), ctx)        
     }
 
     // FUNÇÕES AUXILIÁRES => privadas
@@ -116,5 +125,30 @@ export default class FmeController {
         const moneyArr: IMoney[] = [];        
         parsedData.forEach(e => { moneyArr.push(IMoneyAid.getImoney(e)) });
         return moneyArr
+    }
+
+    private getObjFromBody = async (
+        ctx: RouterContext<string, { value1: string, value2: string }, Record<string, object>>
+    ): Promise<FmeObject> => {
+        const decoder = new TextDecoder("utf-8")
+        const str = decoder.decode((await ctx.request.body.arrayBuffer()).transferToFixedLength())
+        const data: FmeObject = JSON.parse(str)
+        return new FmeObject(data.mainValue, data.secValue, data.currency, data.precision, data.numbers)
+    }
+
+    private async powerOfAux(
+        ctx: RouterContext<string, { value1: string, value2: string }, Record<string, object>>
+    ): Promise<void> {
+        const req:FmeObject = (await this.getObjFromBody(ctx))
+        const main:IMoney = IMoneyAid.getImoney(req.mainValue, false, req.currency, req.precision)
+        ctx.response.body = this.fme.powerOf(main, req.secValue).toJSON()
+    }
+
+    private async rootOfAux(
+        ctx: RouterContext<string, { value1: string, value2: string }, Record<string, object>>
+    ): Promise<void> {
+        const req:FmeObject = (await this.getObjFromBody(ctx))
+        const main:IMoney = IMoneyAid.getImoney(req.mainValue, false, req.currency, req.precision)
+        ctx.response.body = this.fme.rootOf(main, req.secValue).toJSON()
     }
 }

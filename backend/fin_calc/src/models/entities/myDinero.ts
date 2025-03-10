@@ -8,10 +8,13 @@ export default class MyDinero implements IMoney {
     private format: string = '$0,0.00'
     private uuid: string
 
-    constructor(value: number, isConverted: boolean = false, currency: string = 'BRL', locale: string = 'pt-BR', precision: number = 2) {
+    constructor(
+        value: number, isConverted: boolean = false, currency: string = 'BRL',
+         locale: string = 'pt-BR', precision: number = 2) {
         if (typeof value !== 'number' || isNaN(value)) throw new InvalidArgumentError("Não é permitido iniciar MyDinero com valores não numéricos.")
         
-        if (!isConverted) value = value*100;
+        if (!isConverted) 
+            value = value*100;
 
         this.uuid = crypto.randomUUID()
         this.din = dinero({ amount: value, currency, precision });

@@ -14,24 +14,24 @@ export default class Fme implements IFme {
     divide = (addend: IMoney, count: number): IMoney =>  addend.divide(count)
 
     powerOf = (base: IMoney, exponent: number): IMoney  => {
-        if (IMoneyAid.isFloat(exponent))
-            throw new InvalidArgumentError("Expoente deve ser um inteiro.")
         let num: number = Math.pow(base.toUnit(), exponent)
         if (IMoneyAid.isFloat(num)){
             num = Math.round(num * base.getScalePrecision())
         }
-        return IMoneyAid.getImoney(num)
+        return IMoneyAid.getImoney(num, true)
     }
 
     rootOf = (index: IMoney, radicand: number): IMoney => {
         if (radicand === 0)
             throw new InvalidArgumentError("Radicando não pode ser 0.")
-
+        if (radicand === 1)
+            return index
+        
         let num: number = index.toUnit() ** ( 1/radicand )
         if (IMoneyAid.isFloat(num)){
             num = Math.round(num * index.getScalePrecision())
         }
-        return IMoneyAid.getImoney(num)
+        return IMoneyAid.getImoney(num, true)
     }
 
     sumArr = (moneyArr: IMoney[]): IMoney => {
