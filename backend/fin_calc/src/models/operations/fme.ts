@@ -18,7 +18,7 @@ export default class Fme implements IFme {
         if (IMoneyAid.isFloat(num)){
             num = Math.round(num * base.getScalePrecision())
         }
-        return IMoneyAid.getImoney(num, true)
+        return IMoneyAid.getImoney(num, false)
     }
 
     rootOf = (index: IMoney, radicand: number): IMoney => {
@@ -31,7 +31,7 @@ export default class Fme implements IFme {
         if (IMoneyAid.isFloat(num)){
             num = Math.round(num * index.getScalePrecision())
         }
-        return IMoneyAid.getImoney(num, true)
+        return IMoneyAid.getImoney(num, false)
     }
 
     sumArr = (moneyArr: IMoney[]): IMoney => {
