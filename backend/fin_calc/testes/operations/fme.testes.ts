@@ -1,16 +1,15 @@
 import { assertEquals, assertThrows } from "https://deno.land/std@0.192.0/testing/asserts.ts";
 import Fme from "../../src/models/operations/fme.ts";
-import MyDinero from "../../src/models/entities/myDinero.ts";
 import IMoney from "../../src/models/interfaces/IMoney.ts";
 import IMoneyAid from "../../src/models/aid/imoneyAid.ts";
 
 const fme = new Fme();
 
-const instances = (num1: number, num2: number): MyDinero[] => [new MyDinero(num1), new MyDinero(num2)];
+const instances = (num1: number, num2: number): IMoney[] => [IMoneyAid.getImoney(num1),IMoneyAid.getImoney(num2)];
 
 // SOMA 
 Deno.test("1 - Verify the result of the sum of two numbers", () => {
-    const moneys = instances(2, 4);
+    const moneys = [IMoneyAid.getImoney(2),IMoneyAid.getImoney(4)]; 
     const result = fme.sum(moneys[0], moneys[1]);
 
     const expected = "R$6.00";
@@ -51,11 +50,11 @@ Deno.test("4 - Verify the result of the sum of an array", () => {
 
 Deno.test("5 - Verify the result of the sum of a larger array", () => {
     const moneys = [
-        new MyDinero(1.5),
-        new MyDinero(2.5),
-        new MyDinero(3.0),
-        new MyDinero(4.0),
-        new MyDinero(5.0),
+        IMoneyAid.getImoney(1.5),
+        IMoneyAid.getImoney(2.5),
+        IMoneyAid.getImoney(3.0),
+        IMoneyAid.getImoney(4.0),
+        IMoneyAid.getImoney(5.0),
     ];
     const result = fme.sumArr(moneys);
 
@@ -89,11 +88,11 @@ Deno.test("7 - Verify the result of the subtraction of an array", () => {
 
 Deno.test("8 - Verify the result of the subtraction of a larger array", () => {
     const moneys = [
-        new MyDinero(10),
-        new MyDinero(2),
-        new MyDinero(1.5),
-        new MyDinero(0.5),
-        new MyDinero(1),
+        IMoneyAid.getImoney(10),
+        IMoneyAid.getImoney(2),
+        IMoneyAid.getImoney(1.5),
+        IMoneyAid.getImoney(0.5),
+        IMoneyAid.getImoney(1),
     ];
     const result = fme.subtractArr(moneys);
 
@@ -127,10 +126,10 @@ Deno.test("10 - Verify the result of multiplying an array", () => {
 
 Deno.test("11 - Verify the result of multiplying a larger array", () => {
     const moneys = [
-        new MyDinero(1.5),
-        new MyDinero(2),
-        new MyDinero(3),
-        new MyDinero(4),
+        IMoneyAid.getImoney(1.5),
+        IMoneyAid.getImoney(2),
+        IMoneyAid.getImoney(3),
+        IMoneyAid.getImoney(4),
     ];
     const result = fme.multiplyArr(moneys);
 
@@ -164,10 +163,10 @@ Deno.test("13 - Verify the result of dividing an array", () => {
 
 Deno.test("14 - Verify the result of dividing a larger array", () => {
     const moneys = [
-        new MyDinero(36),
-        new MyDinero(3),
-        new MyDinero(2),
-        new MyDinero(1),
+        IMoneyAid.getImoney(36),
+        IMoneyAid.getImoney(3),
+        IMoneyAid.getImoney(2),
+        IMoneyAid.getImoney(1),
     ];
     const result = fme.divideArr(moneys);
 
@@ -192,12 +191,12 @@ Deno.test("16 - Verify dividing an array by zero throws error", () => {
 });
 
 Deno.test("17 - Verify the result of dividing by a value that is not a number", () => {
-    const moneys = [new MyDinero(10), new MyDinero(0)];
+    const moneys = [IMoneyAid.getImoney(10), IMoneyAid.getImoney(0)];
     assertThrows(() => fme.divide(moneys[0], moneys[1].toUnit()), Error, "Divide by 0 is not allowed");
 });
 
 Deno.test("18 - Verify the result of sum with a value that is not a number", () => {
-    assertThrows(() => new MyDinero("abc" as any), 
+    assertThrows(() => IMoneyAid.getImoney("abc" as any), 
     Error, 
     "Não é permitido iniciar MyDinero com valores não numéricos.");
 });

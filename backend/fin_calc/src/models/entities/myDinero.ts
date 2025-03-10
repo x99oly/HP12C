@@ -2,6 +2,7 @@ import dinero from "../../dependencies/number.deps.ts";
 import IMoney from "../interfaces/IMoney.ts";
 import {InvalidArgumentError} from "../../Exceptions/operations.execption.ts";
 import DivideByZeroError from "../../Exceptions/math.exceptions.ts"
+import IMoneyAid from "../aid/imoneyAid.ts";
 
 export default class MyDinero implements IMoney {
     public din: any;
@@ -14,7 +15,7 @@ export default class MyDinero implements IMoney {
         if (typeof value !== 'number' || isNaN(value)) throw new InvalidArgumentError("Não é permitido iniciar MyDinero com valores não numéricos.")
         
         if (!isConverted) 
-            value = value*100;
+            value = IMoneyAid.getIntFromString(value.toFixed(precision))
 
         this.uuid = crypto.randomUUID()
         this.din = dinero({ amount: value, currency, precision });
