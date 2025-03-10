@@ -24,3 +24,14 @@ Deno.test("2 - Verifying the returning of a string cast to int number.", ()=>{
     assertEquals(IMoneyAid.getIntFromString(d), NaN)
 
 } )
+
+Deno.test("2 - Verifying the returning of a float number cast to int number or cents.", ()=>{
+    const a:number = 5
+    const b:number = 5.5
+    const c:number = -19.5
+
+    assertEquals(IMoneyAid.getCentsFromFloat(a,2), 500)
+    assertEquals(IMoneyAid.getCentsFromFloat(b,5), 550000)
+    assertEquals(IMoneyAid.getCentsFromFloat(c,2), -1950)
+
+} )

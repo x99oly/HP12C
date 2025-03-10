@@ -27,5 +27,7 @@ export default class IMoneyAid{
             num = parseInt(toFixedNumber)
         }
         return num
-}
+    }
+
+    public static getCentsFromFloat = (float:number, precision:number) => IMoneyAid.getIntFromString(float.toFixed(precision))
 }
