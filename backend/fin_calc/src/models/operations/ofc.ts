@@ -16,10 +16,10 @@ export default class Ofc{
     presentValue = (
         tax:number, period:number, fv:IMoney=IMoneyAid.getImoney(0), pmt:IMoney=IMoneyAid.getImoney(0)
     ): IMoney => {
-        this.ensureState(true, true, tax, period)
-
-        return IMoneyAid.getImoney( this.pv(fv, tax, period) + (pmt.toUnit()/tax * ( 1 - (1 + tax )**(-period) / tax )))
-    }
+        const discountFactor = (1 - (1 + tax) ** -period) / tax;
+        const pmtFactor = discountFactor * (1 + tax);
+        return IMoneyAid.getImoney(this.pv(fv, tax, period)).sum(IMoneyAid.getImoney(pmt.toUnit() * pmtFactor));
+    }        
     private pv = (fv:IMoney, tax:number, period:number): number => fv.toUnit()/((1+tax)**period)
 
     tax = (fv:IMoney, pv:IMoney, period:number): number => {

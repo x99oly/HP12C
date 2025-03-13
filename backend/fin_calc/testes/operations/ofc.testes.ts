@@ -199,24 +199,24 @@ Deno.test("Verify the result of the Present Value (PV) with Periodic Payments (P
     const testCases = [
         {
             tax: 0.03,
-            period: 6,
-            fv: IMoneyAid.getImoney(500),
-            pmt: IMoneyAid.getImoney(250),
-            expected: "R$1,773.04", // 1773.039
+            period: 9,
+            fv: IMoneyAid.getImoney(2596.08),
+            pmt: IMoneyAid.getImoney(95),
+            expected: "R$2,729.36", // 1773.039
+        }, 
+        {
+            tax: 0.02,
+            period: 16,
+            fv: IMoneyAid.getImoney(3602.48),
+            pmt: IMoneyAid.getImoney(125),
+            expected: "R$4,321.43", // 659.3154
         },
         {
-            tax: 0.1,
-            period: 12,
-            fv: IMoneyAid.getImoney(1000),
-            pmt: IMoneyAid.getImoney(50),
-            expected: "R$659.32", // 659.3154
-        },
-        {
-            tax: 0.05,
-            period: 12,
-            fv: IMoneyAid.getImoney(0),
-            pmt: IMoneyAid.getImoney(100),
-            expected: "R$886.32", // 886.325
+            tax: 0.12,
+            period: 34,
+            fv: IMoneyAid.getImoney(422531.92),
+            pmt: IMoneyAid.getImoney(577.8),
+            expected: "R$13,675.73", // 886.325
         },
     ];
 
