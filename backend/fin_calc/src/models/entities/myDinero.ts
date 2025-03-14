@@ -89,7 +89,7 @@ export default class MyDinero implements IMoney {
     }
 
     multiply(factor: number): IMoney {
-        return new MyDinero(this.din.multiply(factor).toUnit(), false);
+        return new MyDinero(this.din.multiply(factor).getAmount(), true);
     }
 
     divide(divisor: number): IMoney {

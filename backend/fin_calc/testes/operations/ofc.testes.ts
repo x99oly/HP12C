@@ -6,7 +6,7 @@ import IMoney from "../../src/models/interfaces/IMoney.ts";
 const ofc = new Ofc();
 
 // Testes para o método FutureValue
-Deno.test("Verify the result of the Future Value (FV) for multiple cases.", () => {
+Deno.test("1 - futureValue", () => {
     const testCases = [
         {
             pv: IMoneyAid.getImoney(1000),
@@ -30,7 +30,7 @@ Deno.test("Verify the result of the Future Value (FV) for multiple cases.", () =
             pv: IMoneyAid.getImoney(123.45),
             i: 0.03,
             n: 10,
-            expected: "R$165.91", // Resultado aproximado 
+            expected: "R$165.91", // Resultado aproximado
         },
     ];
 
@@ -41,7 +41,7 @@ Deno.test("Verify the result of the Future Value (FV) for multiple cases.", () =
 });
 
 // Testes para o método PresentValue
-Deno.test("Verify the result of the Present Value (PV) for multiple cases.", () => {
+Deno.test("2 - presentValue", () => {
     const testCases = [
         {
             fv: IMoneyAid.getImoney(1795.86),
@@ -94,7 +94,7 @@ Deno.test("Verify the result of the Present Value (PV) for multiple cases.", () 
 });
 
 // Testes para o método tax
-Deno.test("Verify the result of the tax for multiple cases.", () => {
+Deno.test("3 - tax", () => {
     const testCases = [
         {
             fv: IMoneyAid.getImoney(1795.86),
@@ -129,7 +129,7 @@ Deno.test("Verify the result of the tax for multiple cases.", () => {
 });
 
 // Testes para o método period
-Deno.test("Verify the result of the period for multiple cases.", () => {
+Deno.test("4 - period", () => {
     const testCases = [
         {
             fv: IMoneyAid.getImoney(1795.86),
@@ -163,8 +163,8 @@ Deno.test("Verify the result of the period for multiple cases.", () => {
     });
 });
 
-// Testes para o método futureValue com pagamentos periódicos
-Deno.test("Verify the result of the Future Value with Periodic Payments (FV with PMT) for multiple cases.", () => {
+// Testes para o método FutureValue com pagamentos periódicos
+Deno.test("5 - futureValue (PMT)", () => {
     const testCases = [
         {
             pmt: IMoneyAid.getImoney(100),
@@ -195,7 +195,8 @@ Deno.test("Verify the result of the Future Value with Periodic Payments (FV with
     });
 });
 
-Deno.test("Verify the result of the Present Value (PV) with Periodic Payments (PMT) for multiple cases.", () => {
+// Testes para o método PresentValue com Pagamento Periódico
+Deno.test("6 - presentValue (PMT)", () => {
     const testCases = [
         {
             tax: 0.03,
@@ -225,6 +226,67 @@ Deno.test("Verify the result of the Present Value (PV) with Periodic Payments (P
         assertEquals(pv.toFormat(), expected);
     });
 });
+
+// Testes para o método pagamento periódico
+Deno.test("7 - payment", () => {
+    const testCases = [
+        {
+            tax: 0.03,
+            period: 9,
+            pv: IMoneyAid.getImoney(2596.08),
+            expected: "R$333.42", // Este valor é apenas um exemplo, você pode ajustar conforme esperado
+        }, 
+        {
+            tax: 0.02,
+            period: 16,
+            pv: IMoneyAid.getImoney(3602.48),
+            expected: "R$265.32", // Ajuste esse valor conforme seu cálculo real
+        },
+        {
+            tax: 0.12,
+            period: 34,
+            pv: IMoneyAid.getImoney(422531.92),
+            expected: "R$51,802.68", // Ajuste conforme esperado
+        },
+    ];
+
+    testCases.forEach(({ tax, period, pv, expected }) => {
+        const pmt = ofc.payment(tax, period, pv);
+        assertEquals(pmt.toFormat(), expected);
+    });
+});
+
+Deno.test("8 - payment (FV)", () => {
+    const testCases = [
+        {
+            tax: 0.03,
+            period: 9,
+            pv: IMoneyAid.getImoney(2596.08),
+            fv: IMoneyAid.getImoney(500),
+            expected: "R$382.64", // Ajuste conforme esperado
+        },
+        {
+            tax: 0.02,
+            period: 16,
+            pv: IMoneyAid.getImoney(3602.48),
+            fv: IMoneyAid.getImoney(1000),
+            expected: "R$318.97", // Ajuste conforme esperado
+        },
+        {
+            tax: 0.12,
+            period: 34,
+            pv: IMoneyAid.getImoney(422531.92),
+            fv: IMoneyAid.getImoney(50000),
+            expected: "R$51,932.71", // Ajuste conforme esperado
+        },
+    ];
+
+    testCases.forEach(({ tax, period, pv, fv, expected }) => {
+        const pmt = ofc.payment(tax, period, pv, fv);
+        assertEquals(pmt.toFormat(), expected);
+    });
+});
+
 
 
 

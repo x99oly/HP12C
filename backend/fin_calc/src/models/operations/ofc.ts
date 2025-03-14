@@ -1,5 +1,6 @@
 import IMoney from "../interfaces/IMoney.ts";
 import IMoneyAid from "../aid/imoneyAid.ts";
+import { fchmod } from "node:fs";
 
 export default class Ofc{
 
@@ -19,9 +20,19 @@ export default class Ofc{
         const discountFactor = (1 - (1 + tax) ** -period) / tax;
         const pmtFactor = discountFactor * (1 + tax);
         return IMoneyAid.getImoney(this.pv(fv, tax, period)).sum(IMoneyAid.getImoney(pmt.toUnit() * pmtFactor));
-    }        
+    }
+
     private pv = (fv:IMoney, tax:number, period:number): number => fv.toUnit()/((1+tax)**period)
 
+    payment = (tax:number,period:number, pv:IMoney, fv:IMoney=IMoneyAid.getImoney(0) ):IMoney => {
+        return this.pmt(tax,period,pv).sum(this.armedfv(fv,tax,period))
+    }   
+    private pmt = (tax:number,period:number, pv:IMoney):IMoney => 
+        IMoneyAid.getImoney( (pv.toUnit()*tax)/(1-(1+tax)**-period) )
+    private armedfv = (fv:IMoney, tax:number, period:number):IMoney =>{
+        return fv.multiply(tax).divide(((1+tax)**period -1))
+    } 
+    
     tax = (fv:IMoney, pv:IMoney, period:number): number => {
         this.ensureState(false, true, 0, period)
 

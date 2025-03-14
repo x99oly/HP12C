@@ -299,3 +299,86 @@ Deno.test("26 - Verifying the right value for percentual values", () => {
     assertEquals(c, 2.5)
 })
 
+Deno.test("27 - multiply with large and decimal values", () => {
+    const testCases = [
+        {
+            addend: IMoneyAid.getImoney(1234.5678), // valor decimal
+            count: 1000,
+            expected: "R$1,234,567.80", // ajuste conforme esperado
+        },
+        {
+            addend: IMoneyAid.getImoney(0.0001234), // valor bem pequeno
+            count: 1000000,
+            expected: "R$123.40", // ajuste conforme esperado
+        },
+        {
+            addend: IMoneyAid.getImoney(9999999.99), // valor grande
+            count: 1,
+            expected: "R$9,999,999.99", // ajuste conforme esperado
+        },
+        {
+            addend: IMoneyAid.getImoney(999.99), // valor com 2 casas decimais
+            count: 100,
+            expected: "R$99,999.00", // ajuste conforme esperado
+        },
+    ];
+
+    testCases.forEach(({ addend, count, expected }) => {
+        const result = fme.multiply(addend, count);
+        assertEquals(result.toFormat(), expected);
+    });
+});
+
+Deno.test("28 - divide with large and decimal values", () => {
+    const testCases = [
+        {
+            addend: IMoneyAid.getImoney(1234567.89), // valor grande
+            count: 0.258,
+            expected: "R$4,785,146.86", // ajuste conforme esperado
+        },
+        {
+            addend: IMoneyAid.getImoney(987654321.9876), // valor grande e decimal
+            count: 145.6897,
+            expected: "R$6,779,163.67", // ajuste conforme esperado
+        },
+        {
+            addend: IMoneyAid.getImoney(0.0001234), // valor bem pequeno
+            count: 100,
+            expected: "R$0.00", // ajuste conforme esperado, considerando arredondamento
+        },
+        {
+            addend: IMoneyAid.getImoney(5000.75), // valor com casas decimais
+            count: 10,
+            expected: "R$500.08", // ajuste conforme esperado
+        },
+    ];
+
+    testCases.forEach(({ addend, count, expected }) => {
+        const result = fme.divide(addend, count);
+        assertEquals(result.toFormat(), expected);
+    });
+});
+
+Deno.test("29 - multiply precision test with increasing decimal places", () => {
+    let addend = IMoneyAid.getImoney(15); // valor fixo
+    let expectedResult: IMoney = IMoneyAid.getImoney(150.00)
+    let newExpectedResult:IMoney
+
+    for (let i = 1; i <= 120; i++) {
+        const count = parseFloat('9.' + '9999'.repeat(i));
+        const result = fme.multiply(addend, count);
+        const expected:IMoney = expectedResult;
+
+        // console.log(`${result.toFormat()} & ${expected.toFormat()}`)
+        assertEquals(result.toFormat(), expected.toFormat()); // Verificação de precisão
+
+        addend = addend.sum(IMoneyAid.getImoney(1))
+        newExpectedResult = IMoneyAid.getImoney(10)
+        expectedResult = fme.sum(expectedResult, newExpectedResult)
+    }
+});
+
+
+
+
+
